@@ -1,0 +1,5 @@
+*.bak
+/.gradle/
+/gradle/
+/gradlew*
+/build
