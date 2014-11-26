@@ -23,10 +23,7 @@ repositories {
 // In this section you declare the dependencies for your production and test code
 dependencies {
     // The production code uses the SLF4J logging API at compile time
-    compile 'org.slf4j:slf4j-api:1.7.5',
-            'org.slf4j:slf4j-simple:1.7.7',
-            'commons-cli:commons-cli:1.2'
-    compile  'ch.qos.logback:logback-classic:1.1.2'
+    compile 'commons-cli:commons-cli:1.2'
 }
 
 idea.project.ipr {
@@ -35,4 +32,14 @@ idea.project.ipr {
                 .find { it.@name == 'VcsDirectoryMappings' }
                 .mapping.@vcs = 'Git'
     }
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Clearcase auto check tool',
+                'Main-Class': 'CCheckin'
+    }
+    baseName = 'checkin'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }

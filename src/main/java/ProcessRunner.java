@@ -4,9 +4,6 @@
  */
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +15,6 @@ import java.io.InputStreamReader;
  */
 public class ProcessRunner {
 
-    final static Logger logger = LoggerFactory.getLogger(ProcessRunner.class);
 
     public static void runCommand(String... command) {
         ProcessBuilder processBuilder = new ProcessBuilder(command);
@@ -45,7 +41,7 @@ public class ProcessRunner {
 
         try {
             while ((line = br.readLine()) != null) {
-                logger.debug(line);
+                System.out.println(line);
             }
         } catch (IOException e) {
             e.printStackTrace();

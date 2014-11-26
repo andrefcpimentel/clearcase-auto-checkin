@@ -1,6 +1,4 @@
 import org.apache.commons.cli.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,9 +10,8 @@ import java.io.IOException;
  *
  * @author baxue, @date 11/25/14 10:29 PM
  */
-public class CCHelper {
+public class CCheckin {
 
-    static Logger logger = LoggerFactory.getLogger(CCHelper.class.getClass());
 
     public static void main(String[] args) throws ParseException {
 
@@ -29,13 +26,13 @@ public class CCHelper {
         String changePath = ".";
         if (line.hasOption("l")) {
             changePath = line.getOptionValue("l");
-            logger.debug(changePath);
+            System.out.println(changePath);
         }
 
         String clearCasePath = ".";
         if (line.hasOption("c")) {
             clearCasePath = line.getOptionValue("c");
-            logger.debug(clearCasePath);
+            System.out.println(clearCasePath);
         }
 
         Compare compare = new Compare();
@@ -43,11 +40,11 @@ public class CCHelper {
             File dirA = new File(changePath);
             File dirB = new File(clearCasePath);
             if (!dirA.exists()) {
-                logger.error("need input local dir");
+                System.err.println("need input local dir");
                 System.exit(0);
             }
             if (!dirB.exists()) {
-                logger.error("need input clear case dir");
+                System.err.println("need input clear case dir");
                 System.exit(0);
             }
             compare.getDiff(dirA, dirB);
