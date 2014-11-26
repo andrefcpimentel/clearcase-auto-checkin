@@ -17,14 +17,14 @@ public class Compare {
         Arrays.sort(fileList2);
         HashMap<String, File> map1;
         if (fileList1.length < fileList2.length) {
-            map1 = new HashMap<String, File>();
+            map1 = new HashMap<>();
             for (int i = 0; i < fileList1.length; i++) {
                 map1.put(fileList1[i].getName(), fileList1[i]);
             }
 
             compareNow(fileList2, map1);
         } else {
-            map1 = new HashMap<String, File>();
+            map1 = new HashMap<>();
             for (int i = 0; i < fileList2.length; i++) {
                 map1.put(fileList2[i].getName(), fileList2[i]);
             }
@@ -34,30 +34,32 @@ public class Compare {
 
     public void compareNow(File[] fileArr, HashMap<String, File> map) throws IOException {
         for (int i = 0; i < fileArr.length; i++) {
-            File dest = fileArr[i];
-            String fName = dest.getName();
-            File src = map.get(fName);
+            File sourceFile = fileArr[i];
+            String fName = sourceFile.getName();
+            File destFile = map.get(fName);
             map.remove(fName);
-            if (src != null) {
-                if (src.isDirectory()) {
-                    getDiff(dest, src);
+            if (destFile != null) {
+                if (destFile.isDirectory()) {
+                    getDiff(sourceFile, destFile);
                 } else {
-                    String cSum1 = checksum(dest);
-                    String cSum2 = checksum(src);
+                    String cSum1 = checksum(sourceFile);
+                    String cSum2 = checksum(destFile);
                     if (!cSum1.equals(cSum2)) {
 
-                        String destPath = dest.toString();
-                        ProcessRunner.runCommand("cleartool", "uncheckout", "-rm", destPath);
+                        String srcPath = sourceFile.toString();
+                        String destPath = destFile.toString();
+                        System.out.println(srcPath);
+                        System.out.println(destPath);
                         ProcessRunner.runCommand("cleartool", "checkout", "-nc", destPath);
-                        ProcessRunner.runCommand("cmd", "/c", "copy /Y " + src.toString() + " " + destPath);
+                        ProcessRunner.runCommand("cmd", "/c", "copy /Y " + srcPath + " " + destPath);
                         ProcessRunner.runCommand("cleartool", "checkin", "-nc", destPath);
-                        ProcessRunner.runCommand("cleartool", "describe", "-nc", destPath);
+                        ProcessRunner.runCommand("cleartool", "describe", destPath);
                     }
 
                 }
             } else {
-                if (dest.isDirectory()) {
-                    traverseDirectory(dest);
+                if (sourceFile.isDirectory()) {
+                    traverseDirectory(sourceFile);
                 }
 
             }
