@@ -34,30 +34,30 @@ public class Compare {
 
     public void compareNow(File[] fileArr, HashMap<String, File> map) throws IOException {
         for (int i = 0; i < fileArr.length; i++) {
-            String fName = fileArr[i].getName();
-            File fComp = map.get(fName);
+            File dest = fileArr[i];
+            String fName = dest.getName();
+            File src = map.get(fName);
             map.remove(fName);
-            if (fComp != null) {
-                if (fComp.isDirectory()) {
-                    getDiff(fileArr[i], fComp);
+            if (src != null) {
+                if (src.isDirectory()) {
+                    getDiff(dest, src);
                 } else {
-                    String cSum1 = checksum(fileArr[i]);
-                    String cSum2 = checksum(fComp);
+                    String cSum1 = checksum(dest);
+                    String cSum2 = checksum(src);
                     if (!cSum1.equals(cSum2)) {
-                        System.out.println(fileArr[i] + "\n" + fComp.toString());
-                        //TODO: check out, copy, check in, show version
-/*
-cleartool co -nc b:\baxue_915380\pt_java\src\common\psft\pt8\cs.java
-copy /Y d:\PT85310x-RETAIL\src\common\psft\pt8\cs.java b:\baxue_915380\pt_java\src\common\psft\pt8\cs.java
-cleartool ci -nc b:\baxue_915380\pt_java\src\common\psft\pt8\cs.java
-cleartool describe b:\baxue_915380\pt_java\src\common\psft\pt8\cs.java
-*/
+
+                        String destPath = dest.toString();
+                        ProcessRunner.runCommand("cleartool", "uncheckout", "-rm", destPath);
+                        ProcessRunner.runCommand("cleartool", "checkout", "-nc", destPath);
+                        ProcessRunner.runCommand("copy", "/Y", src.toString(), destPath);
+                        ProcessRunner.runCommand("cleartool", "checkin", "-nc", destPath);
+                        ProcessRunner.runCommand("cleartool", "describe", "-nc", destPath);
                     }
 
                 }
             } else {
-                if (fileArr[i].isDirectory()) {
-                    traverseDirectory(fileArr[i]);
+                if (dest.isDirectory()) {
+                    traverseDirectory(dest);
                 }
 
             }
