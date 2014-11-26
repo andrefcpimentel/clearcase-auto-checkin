@@ -49,7 +49,7 @@ public class Compare {
                         String destPath = dest.toString();
                         ProcessRunner.runCommand("cleartool", "uncheckout", "-rm", destPath);
                         ProcessRunner.runCommand("cleartool", "checkout", "-nc", destPath);
-                        ProcessRunner.runCommand("copy", "/Y", src.toString(), destPath);
+                        ProcessRunner.runCommand("cmd", "/c", "copy /Y " + src.toString() + " " + destPath);
                         ProcessRunner.runCommand("cleartool", "checkin", "-nc", destPath);
                         ProcessRunner.runCommand("cleartool", "describe", "-nc", destPath);
                     }
@@ -94,13 +94,15 @@ public class Compare {
             int read;
             do {
                 read = fin.read(buffer);
-                if (read > 0)
+                if (read > 0) {
                     md5er.update(buffer, 0, read);
+                }
             } while (read != -1);
             fin.close();
             byte[] digest = md5er.digest();
-            if (digest == null)
+            if (digest == null) {
                 return null;
+            }
             String strDigest = "0x";
             for (int i = 0; i < digest.length; i++) {
                 strDigest += Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1).toUpperCase();

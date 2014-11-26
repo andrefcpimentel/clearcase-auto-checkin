@@ -40,10 +40,19 @@ public class CCHelper {
 
         Compare compare = new Compare();
         try {
-            compare.getDiff(new File(changePath), new File(clearCasePath));
+            File dirA = new File(changePath);
+            File dirB = new File(clearCasePath);
+            if (!dirA.exists()) {
+                logger.error("need input local dir");
+                System.exit(0);
+            }
+            if (!dirB.exists()) {
+                logger.error("need input clear case dir");
+                System.exit(0);
+            }
+            compare.getDiff(dirA, dirB);
         } catch (IOException ie) {
             ie.printStackTrace();
         }
-
     }
 }
