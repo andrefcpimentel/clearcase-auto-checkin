@@ -20,6 +20,17 @@ public class ProcessRunner {
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.redirectErrorStream(true);
 
+        String test = System.getProperty("test");
+
+        for (String s : command) {
+            System.out.print(s + " ");
+        }
+        System.out.println();
+
+        if ("true".equals(test)) {
+            return;
+        }
+
         Process process = null;
         try {
             process = processBuilder.start();
@@ -41,7 +52,9 @@ public class ProcessRunner {
 
         try {
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
+                if (line.contains("version")) {
+                    System.out.println(line);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
