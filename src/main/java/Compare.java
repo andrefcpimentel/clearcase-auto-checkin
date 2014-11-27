@@ -13,7 +13,9 @@ public class Compare {
     public void getDiff(File dirA, File dirB) throws IOException {
         File[] fileList1 = dirA.listFiles();
         File[] fileList2 = dirB.listFiles();
+        assert fileList1 != null;
         Arrays.sort(fileList1);
+        assert fileList2 != null;
         Arrays.sort(fileList2);
         HashMap<String, File> map1;
         if (fileList1.length < fileList2.length) {
@@ -53,7 +55,7 @@ public class Compare {
                         ProcessRunner.runCommand("cleartool", "checkout", "-nc", destPath);
                         ProcessRunner.runCommand("cmd", "/c", "copy /Y " + srcPath + " " + destPath);
                         ProcessRunner.runCommand("cleartool", "checkin", "-nc", destPath);
-                        ProcessRunner.runCommand("cleartool", "describe", destPath);
+                        ProcessRunner.runCommand("cleartool", "describe", "-s", destPath);
                     }
 
                 }
@@ -80,6 +82,7 @@ public class Compare {
 
     public void traverseDirectory(File dir) {
         File[] list = dir.listFiles();
+        assert list != null;
         for (int k = 0; k < list.length; k++) {
             if (list[k].isDirectory()) {
                 traverseDirectory(list[k]);
