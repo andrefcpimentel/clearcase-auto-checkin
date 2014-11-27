@@ -50,8 +50,6 @@ public class Compare {
 
                         String srcPath = sourceFile.toString();
                         String destPath = destFile.toString();
-                        System.out.println(srcPath);
-                        System.out.println(destPath);
                         ProcessRunner.runCommand("cleartool", "checkout", "-nc", destPath);
                         ProcessRunner.runCommand("cmd", "/c", "copy /Y " + srcPath + " " + destPath);
                         ProcessRunner.runCommand("cleartool", "checkin", "-nc", destPath);

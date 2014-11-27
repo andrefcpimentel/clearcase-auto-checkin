@@ -21,11 +21,15 @@ public class ProcessRunner {
         processBuilder.redirectErrorStream(true);
 
         String test = System.getProperty("test");
+        String debug = System.getProperty("debug");
 
-        for (String s : command) {
-            System.out.print(s + " ");
+        if ("true".equals(debug)) {
+            for (String s : command) {
+                System.out.print(s + " ");
+            }
+            System.out.println();
         }
-        System.out.println();
+
 
         if ("true".equals(test)) {
             return;
