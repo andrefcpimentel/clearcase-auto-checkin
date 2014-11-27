@@ -33,6 +33,11 @@ idea.project.ipr {
                 .mapping.@vcs = 'Git'
     }
 }
+idea {
+    project {
+        languageLevel = '1.7'
+    }
+}
 
 task fatJar(type: Jar) {
     manifest {

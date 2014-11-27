@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
 public class Compare {
@@ -14,29 +13,30 @@ public class Compare {
         File[] fileList1 = dirA.listFiles();
         File[] fileList2 = dirB.listFiles();
         assert fileList1 != null;
-        Arrays.sort(fileList1);
         assert fileList2 != null;
+
+        Arrays.sort(fileList1);
         Arrays.sort(fileList2);
-        HashMap<String, File> map1;
+
+        HashMap<String, File> map;
         if (fileList1.length < fileList2.length) {
-            map1 = new HashMap<>();
-            for (int i = 0; i < fileList1.length; i++) {
-                map1.put(fileList1[i].getName(), fileList1[i]);
+            map = new HashMap<>();
+            for (File aFileList1 : fileList1) {
+                map.put(aFileList1.getName(), aFileList1);
             }
 
-            compareNow(fileList2, map1);
+            compareNow(fileList2, map);
         } else {
-            map1 = new HashMap<>();
-            for (int i = 0; i < fileList2.length; i++) {
-                map1.put(fileList2[i].getName(), fileList2[i]);
+            map = new HashMap<>();
+            for (File aFileList2 : fileList2) {
+                map.put(aFileList2.getName(), aFileList2);
             }
-            compareNow(fileList1, map1);
+            compareNow(fileList1, map);
         }
     }
 
     public void compareNow(File[] fileArr, HashMap<String, File> map) throws IOException {
-        for (int i = 0; i < fileArr.length; i++) {
-            File sourceFile = fileArr[i];
+        for (File sourceFile : fileArr) {
             String fName = sourceFile.getName();
             File destFile = map.get(fName);
             map.remove(fName);
@@ -67,9 +67,7 @@ public class Compare {
             }
         }
         Set<String> set = map.keySet();
-        Iterator<String> it = set.iterator();
-        while (it.hasNext()) {
-            String n = it.next();
+        for (String n : set) {
             File fileFrmMap = map.get(n);
             map.remove(n);
             if (fileFrmMap.isDirectory()) {
@@ -83,9 +81,9 @@ public class Compare {
     public void traverseDirectory(File dir) {
         File[] list = dir.listFiles();
         assert list != null;
-        for (int k = 0; k < list.length; k++) {
-            if (list[k].isDirectory()) {
-                traverseDirectory(list[k]);
+        for (File aList : list) {
+            if (aList.isDirectory()) {
+                traverseDirectory(aList);
             }
 
         }
@@ -109,8 +107,8 @@ public class Compare {
                 return null;
             }
             String strDigest = "0x";
-            for (int i = 0; i < digest.length; i++) {
-                strDigest += Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1).toUpperCase();
+            for (byte aDigest : digest) {
+                strDigest += Integer.toString((aDigest & 0xff) + 0x100, 16).substring(1).toUpperCase();
             }
             return strDigest;
         } catch (Exception e) {

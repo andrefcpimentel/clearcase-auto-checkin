@@ -1,7 +1,9 @@
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.Options;
 
 import java.io.File;
-import java.io.IOException;
 
 
 /*
@@ -13,7 +15,7 @@ import java.io.IOException;
 public class CCheckin {
 
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws Exception {
 
         // create the parser
         CommandLineParser parser = new GnuParser();
@@ -36,20 +38,17 @@ public class CCheckin {
         }
 
         Compare compare = new Compare();
-        try {
-            File dirA = new File(changePath);
-            File dirB = new File(clearCasePath);
-            if (!dirA.exists()) {
-                System.err.println("need input local dir");
-                System.exit(0);
-            }
-            if (!dirB.exists()) {
-                System.err.println("need input clear case dir");
-                System.exit(0);
-            }
-            compare.getDiff(dirA, dirB);
-        } catch (IOException ie) {
-            ie.printStackTrace();
+        File dirA = new File(changePath);
+        File dirB = new File(clearCasePath);
+        if (!dirA.exists()) {
+            System.err.println("need input local dir");
+            System.exit(0);
         }
+        if (!dirB.exists()) {
+            System.err.println("need input clear case dir");
+            System.exit(0);
+        }
+        compare.getDiff(dirA, dirB);
+
     }
 }
