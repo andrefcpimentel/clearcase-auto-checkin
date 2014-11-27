@@ -25,7 +25,7 @@ public class ProcessRunner {
             process = processBuilder.start();
             process.waitFor();
 
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
