@@ -56,7 +56,7 @@ public class ProcessRunner {
 
         try {
             while ((line = br.readLine()) != null) {
-                if (line.contains("version")) {
+                if (line.contains("@@")) {
                     System.out.println(line);
                 }
             }
