@@ -1,8 +1,5 @@
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
@@ -45,17 +42,13 @@ public class Compare {
                     getDiff(sourceFile, destFile);
                 } else {
                     if (sourceFile.length() != destFile.length()) {
-                        String cSum1 = checksum(sourceFile);
-                        String cSum2 = checksum(destFile);
-                        if (!cSum1.equals(cSum2)) {
 
-                            String srcPath = sourceFile.toString();
-                            String destPath = destFile.toString();
-                            ProcessRunner.runCommand("cleartool", "checkout", "-nc", destPath);
-                            ProcessRunner.runCommand("cmd", "/c", "copy /Y " + srcPath + " " + destPath);
-                            ProcessRunner.runCommand("cleartool", "checkin", "-nc", destPath);
-                            ProcessRunner.runCommand("cleartool", "describe", "-s", destPath);
-                        }
+                        String srcPath = sourceFile.toString();
+                        String destPath = destFile.toString();
+                        ProcessRunner.runCommand("cleartool", "checkout", "-nc", destPath);
+                        ProcessRunner.runCommand("cmd", "/c", "copy /Y " + srcPath + " " + destPath);
+                        ProcessRunner.runCommand("cleartool", "checkin", "-nc", destPath);
+                        ProcessRunner.runCommand("cleartool", "describe", "-s", destPath);
                     }
                 }
             } else {
@@ -85,33 +78,6 @@ public class Compare {
                 traverseDirectory(aList);
             }
 
-        }
-    }
-
-    public String checksum(File file) {
-        try {
-            InputStream fin = new FileInputStream(file);
-            java.security.MessageDigest md5er = MessageDigest.getInstance("MD5");
-            byte[] buffer = new byte[1024];
-            int read;
-            do {
-                read = fin.read(buffer);
-                if (read > 0) {
-                    md5er.update(buffer, 0, read);
-                }
-            } while (read != -1);
-            fin.close();
-            byte[] digest = md5er.digest();
-            if (digest == null) {
-                return null;
-            }
-            String strDigest = "0x";
-            for (byte aDigest : digest) {
-                strDigest += Integer.toString((aDigest & 0xff) + 0x100, 16).substring(1).toUpperCase();
-            }
-            return strDigest;
-        } catch (Exception e) {
-            return null;
         }
     }
 }
