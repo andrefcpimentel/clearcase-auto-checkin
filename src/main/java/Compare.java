@@ -44,18 +44,19 @@ public class Compare {
                 if (destFile.isDirectory()) {
                     getDiff(sourceFile, destFile);
                 } else {
-                    String cSum1 = checksum(sourceFile);
-                    String cSum2 = checksum(destFile);
-                    if (!cSum1.equals(cSum2)) {
+                    if (sourceFile.length() != destFile.length()) {
+                        String cSum1 = checksum(sourceFile);
+                        String cSum2 = checksum(destFile);
+                        if (!cSum1.equals(cSum2)) {
 
-                        String srcPath = sourceFile.toString();
-                        String destPath = destFile.toString();
-                        ProcessRunner.runCommand("cleartool", "checkout", "-nc", destPath);
-                        ProcessRunner.runCommand("cmd", "/c", "copy /Y " + srcPath + " " + destPath);
-                        ProcessRunner.runCommand("cleartool", "checkin", "-nc", destPath);
-                        ProcessRunner.runCommand("cleartool", "describe", "-s", destPath);
+                            String srcPath = sourceFile.toString();
+                            String destPath = destFile.toString();
+                            ProcessRunner.runCommand("cleartool", "checkout", "-nc", destPath);
+                            ProcessRunner.runCommand("cmd", "/c", "copy /Y " + srcPath + " " + destPath);
+                            ProcessRunner.runCommand("cleartool", "checkin", "-nc", destPath);
+                            ProcessRunner.runCommand("cleartool", "describe", "-s", destPath);
+                        }
                     }
-
                 }
             } else {
                 if (sourceFile.isDirectory()) {
